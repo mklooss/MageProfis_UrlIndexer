@@ -46,7 +46,7 @@ extends Mage_Core_Controller_Varien_Router_Abstract
         );
 
         $query = $this->_getConnection()->select()
-                ->from($this->getTableName('urlindexer/url_rewrite_redirects'), array('product_id', 'category_id', 'target_path'))
+                ->from($this->getTableName('urlindexer/url_rewrite_redirects'), array('product_id', 'category_id', 'target_path', 'options'))
                 ->where('store_id IN (?)', $stores)
                 ->where('request_path IN (?)', $ident)
                 ->order('store_id DESC')
