@@ -2,10 +2,20 @@
 <config>
     <modules>
         <MageProfis_UrlIndexer>
-            <version>1.0.0.0</version>
+            <version>1.0.0.1</version>
         </MageProfis_UrlIndexer>
     </modules>
     <global>
+        <helpers>
+            <urlindexer>
+                <class>MageProfis_UrlIndexer_Helper</class>
+            </urlindexer>
+            <catalog>
+                <rewrite>
+                    <category_url_rewrite>MageProfis_UrlIndexer_Helper_Category_Url_Rewrite</category_url_rewrite>
+                </rewrite>
+            </catalog>
+        </helpers>
         <models>
             <urlindexer>
                 <class>MageProfis_UrlIndexer_Model</class>
@@ -17,6 +27,9 @@
                     <url_rewrite_redirects>
                         <table>core_url_rewrite_redirects</table>
                     </url_rewrite_redirects>
+                    <url_rewrite_category>
+                        <table>core_url_rewrite_category</table>
+                    </url_rewrite_category>
                 </entities>
             </urlindexer_resource>
             <catalog>
@@ -24,6 +37,11 @@
                     <url>MageProfis_UrlIndexer_Model_Url</url>
                 </rewrite>
             </catalog>
+            <catalog_resource>
+                <rewrite>
+                    <url>MageProfis_UrlIndexer_Model_Resource_Url</url>
+                </rewrite>
+            </catalog_resource>
         </models>
         <resources>
             <urlindexer_setup>
@@ -44,4 +62,32 @@
             </controller_front_init_routers>
         </events>
     </global>
+    <adminhtml>
+        <events>
+            <catalog_category_prepare_save>
+                <observers>
+                    <urlindexer>
+                        <class>urlindexer/observer</class>
+                        <method>catalogCategorySave</method>
+                    </urlindexer>
+                </observers>
+            </catalog_category_prepare_save>
+            <catalog_product_prepare_save>
+                <observers>
+                    <urlindexer>
+                        <class>urlindexer/observer</class>
+                        <method>catalogProductSave</method>
+                    </urlindexer>
+                </observers>
+            </catalog_product_prepare_save>
+        </events>
+    </adminhtml>
+    <default>
+        <dev>
+            <index>
+                <regen_category_url>0</regen_category_url>
+                <optimize_categorie_leftjoin>1</optimize_categorie_leftjoin>
+            </index>
+        </dev>
+    </default>
 </config>

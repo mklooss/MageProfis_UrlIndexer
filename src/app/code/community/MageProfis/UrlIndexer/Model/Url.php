@@ -47,6 +47,10 @@ extends Mage_Catalog_Model_Url
      */
     protected function _hasCategoryUrl(Varien_Object $category)
     {
+        if (Mage::getStoreConfigFlag('dev/index/regen_category_url', $category->getStoreId()))
+        {
+            return false;
+        }
         $query = $this->_connection()->select()
                 ->from($this->_resource()->getTableName('core_url_rewrite'), 'id_path')
                 ->where('store_id = ?', (int) $category->getStoreId())
@@ -78,6 +82,8 @@ extends Mage_Catalog_Model_Url
             $categoryId = $category->getId();
             $path = $path.'/'.$categoryId;
         }
+
+        // if category id is set do not generate an url
         if (intval($categoryId) > 0
                 && !Mage::getStoreConfigFlag('catalog/seo/product_use_categories', $category->getStoreId()))
         {
