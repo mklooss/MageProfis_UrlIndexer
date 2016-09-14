@@ -25,7 +25,7 @@ $installer->getConnection()
 
 // clone original core_url_rewrite
 $table = $installer->getConnection()
-    ->newTable($installer->getTable($newTableName))
+    ->newTable($newTableName)
     ->addColumn('url_rewrite_id', Varien_Db_Ddl_Table::TYPE_INTEGER, null, array(
         'identity'  => true,
         'unsigned'  => true,
