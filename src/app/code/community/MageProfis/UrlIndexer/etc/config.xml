@@ -90,4 +90,16 @@
             </index>
         </dev>
     </default>
+    <crontab>
+        <jobs>
+            <urlindexer_category_table_renew>
+                <schedule>
+                    <cron_expr>30 4 * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>urlindexer/observer::renewCategoryUrlRewriteTable</model>
+                </run>
+            </urlindexer_category_table_renew>
+        </jobs>
+    </crontab>
 </config>

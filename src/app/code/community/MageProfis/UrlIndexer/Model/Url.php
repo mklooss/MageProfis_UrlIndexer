@@ -4,6 +4,27 @@ class MageProfis_UrlIndexer_Model_Url
 extends Mage_Catalog_Model_Url
 {
     /**
+     * Refresh all rewrite urls for some store or for all stores
+     * Used to make full reindexing of url rewrites
+     *
+     * @param int $storeId
+     * @return MageProfis_UrlIndexer_Model_Url
+     */
+    public function refreshRewrites($storeId = null)
+    {
+        parent::refreshRewrites($storeId);
+        /**
+         * renew the hole category table after url index
+         * to prevent incorrect data in the table!
+         */
+        if (is_null($storeId))
+        {
+            Mage::helper('urlindexer')->copyAllCategories();
+        }
+        return $this;
+    }
+    
+    /**
      * Refresh product rewrite
      *
      * @param Varien_Object $product

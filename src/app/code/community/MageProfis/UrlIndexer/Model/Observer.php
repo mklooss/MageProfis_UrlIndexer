@@ -100,7 +100,7 @@ extends Mage_Core_Model_Abstract
                     'category_id'   => $_item['category_id'],
                     'product_id'    => (int) $_item['product_id'],
                 );
-//var_dump($data);exit;
+
                 $this->_connection('core_write')
                         ->insertOnDuplicate($this->_resource()->getTableName('urlindexer/url_rewrite_redirects'), $data, array('request_path', 'target_path', 'product_id'));
                 if ($remove)
@@ -110,6 +110,18 @@ extends Mage_Core_Model_Abstract
                             ->delete($this->_resource()->getTableName('core/url_rewrite'), $where);
                 }
             }
+        }
+    }
+
+    /**
+     * Daily CronTask, to prevent Incorrect Data in the Table,
+     * an keep the Database clean
+     */
+    public function renewCategoryUrlRewriteTable()
+    {
+        if (Mage::getStoreConfigFlag('dev/index/optimize_categorie_leftjoin'))
+        {
+            Mage::helper('urlindexer')->copyAllCategories();
         }
     }
 
