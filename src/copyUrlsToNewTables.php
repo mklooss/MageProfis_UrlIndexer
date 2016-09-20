@@ -32,6 +32,9 @@ $installer->copyAllItemsToRedirectTable();
 echo date('Y-m-d H:i:s')." - Truncate Magento URL Index Table\n";
 $installer->truncateMagentoTables();
 
+echo date('Y-m-d H:i:s')." - Add Database Index\n";
+$installer->addIndexElementToTable();
+
 echo date('Y-m-d H:i:s')." - Reindex Catalog URL\n";
 $installer->reindexUrls();
 

@@ -8,19 +8,9 @@ $originTableName = $installer->getTable('core/url_rewrite');
 $newTableName = $installer->getTable('urlindexer/url_rewrite_redirects');
 
 // set index/key in core_url_rewrite to perform left join
-try {
-$installer->getConnection()
-        ->addIndex(
-                $installer->getTable('core/url_rewrite'),
-                $installer->getIdxName('core/url_rewrite', array('category_id', 'is_system', 'product_id', 'store_id', 'id_path')),
-                        array('category_id', 'is_system', 'product_id', 'store_id', 'id_path'),
-                        Varien_Db_Adapter_Interface::INDEX_TYPE_INDEX
-        );
-} catch(Exception $e)
+if ($installer->canAddIndexOnInstall())
 {
-    // ignore result, some stores have this key, some other not, so we add this here
-    // and do not check on an error ;-)
-    // is just an small performance tweak
+    $installer->addIndexElementToTable();
 }
 
 // clone original core_url_rewrite

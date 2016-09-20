@@ -9,10 +9,18 @@ extends Mage_Core_Model_Resource_Setup
      */
     public function truncateNewTables()
     {
-        $this->getConnection()->delete($this->getTable('urlindexer/url_rewrite_redirects'));
-        $this->getConnection()->delete($this->getTable('urlindexer/url_rewrite_category'));
-        $this->getConnection()->truncateTable($this->getTable('urlindexer/url_rewrite_redirects'));
-        $this->getConnection()->truncateTable($this->getTable('urlindexer/url_rewrite_category'));
+        try {
+            $this->getConnection()->truncateTable($this->getTable('urlindexer/url_rewrite_redirects'));
+        } catch (Exception $e) {
+            $this->getConnection()->delete($this->getTable('urlindexer/url_rewrite_redirects'));
+            $this->getConnection()->truncateTable($this->getTable('urlindexer/url_rewrite_redirects'));
+        }
+        try {
+            $this->getConnection()->truncateTable($this->getTable('urlindexer/url_rewrite_category'));
+        } catch (Exception $e) {
+            $this->getConnection()->delete($this->getTable('urlindexer/url_rewrite_category'));
+            $this->getConnection()->truncateTable($this->getTable('urlindexer/url_rewrite_category'));
+        }
     }
 
     /**
@@ -20,8 +28,12 @@ extends Mage_Core_Model_Resource_Setup
      */
     public function truncateMagentoTables()
     {
-        $this->getConnection()->delete($this->getTable('core/url_rewrite'));
-        $this->getConnection()->truncateTable($this->getTable('core/url_rewrite'));
+        try {
+            $this->getConnection()->truncateTable($this->getTable('core/url_rewrite'));
+        } catch (Exception $e) {
+            $this->getConnection()->delete($this->getTable('core/url_rewrite'));
+            $this->getConnection()->truncateTable($this->getTable('core/url_rewrite'));
+        }
     }
 
     /**
@@ -66,6 +78,42 @@ ON DUPLICATE KEY UPDATE id_path = cur.id_path');
 SELECT cur.`store_id`, cur.`id_path`, cur.`request_path`, cur.`target_path`, cur.`is_system`, cur.`options`, cur.`description`, cur.`category_id`, cur.`product_id` FROM `{$originTableName}` cur
 WHERE id_path LIKE 'category/%'
 ON DUPLICATE KEY UPDATE id_path = cur.id_path");
+        return $this;
+    }
+
+    /**
+     * 
+     * @return boolean
+     */
+    public function canAddIndexOnInstall()
+    {
+        $itemsCount = (int) $this->getConnection()->fetchOne('SELECT COUNT(*) as count FROM '.$this->getTable('core/url_rewrite'));
+        if ($itemsCount > 2000)
+        {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * 
+     */
+    public function addIndexElementToTable()
+    {
+        try {
+            $this->getConnection()
+                ->addIndex(
+                        $this->getTable('core/url_rewrite'),
+                        $this->getIdxName('core/url_rewrite', array('category_id', 'is_system', 'product_id', 'store_id', 'id_path')),
+                                array('category_id', 'is_system', 'product_id', 'store_id', 'id_path'),
+                                Varien_Db_Adapter_Interface::INDEX_TYPE_INDEX
+                );
+        } catch(Exception $e)
+        {
+            // ignore result, some stores have this key, some other not, so we add this here
+            // and do not check on an error ;-)
+            // is just an small performance tweak
+        }
         return $this;
     }
 }
