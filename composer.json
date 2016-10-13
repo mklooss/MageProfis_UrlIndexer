@@ -1,0 +1,21 @@
+{
+  "name": "mageprofis/urlindexer",
+  "license": "OSL 3.0",
+  "type": "magento-module",
+  "description": "Magento UrlIndexer",
+  "homepage": "https://github.com/mklooss/MageProfis_UrlIndexer",
+  "require": {
+    "php": ">=5.3"
+  },
+  "suggest": {
+    "magento-hackathon/magento-composer-installer": "*"
+  },
+  "authors": [
+    {
+      "name": "Mathis Klooß",
+      "email": "mathis@mage-profis.de",
+      "role": "Author/Maintainer"
+    }
+  ]
+}
+ 
