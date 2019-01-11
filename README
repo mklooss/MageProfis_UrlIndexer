@@ -1,0 +1,6 @@
+MageProfis_UrlIndexer
+
+When your Store have more than 2000 rows in core_url_rewrite, you have to trigger the update with the file:
+
+php copyUrlsToNewTables.php
+https://github.com/mklooss/MageProfis_UrlIndexer/blob/master/src/copyUrlsToNewTables.php
