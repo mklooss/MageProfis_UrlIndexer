@@ -18,7 +18,7 @@ require_once 'app/Mage.php';
 
 Mage::app('admin')->setUseSessionInUrl(false);
 
-$installer = new MageProfis_UrlIndexer_Model_Resource_Setup();
+$installer = new MageProfis_UrlIndexer_Model_Resource_Setup('core_setup');
 
 echo date('Y-m-d H:i:s')." - Truncate New Tables\n";
 $installer->truncateNewTables();
