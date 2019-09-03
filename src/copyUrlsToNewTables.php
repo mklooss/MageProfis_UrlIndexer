@@ -7,6 +7,12 @@
  * only use this script for the initial action
  */
 
+if (php_sapi_name() != 'cli')
+{
+    echo "Only allowed via cli ~# php copyUrlsToNewTables.php";
+    exit(2);
+}
+
 $dir = __DIR__;
 if (isset($_SERVER['SCRIPT_FILENAME']))
 {
