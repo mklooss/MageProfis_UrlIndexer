@@ -21,6 +21,15 @@ extends Mage_Core_Model_Resource_Setup
             $this->getConnection()->delete($this->getTable('urlindexer/url_rewrite_category'));
             $this->getConnection()->truncateTable($this->getTable('urlindexer/url_rewrite_category'));
         }
+        $core_url_rewrite = $this->getTables('core_url_rewrite');
+        $catalog_product_entity = $this->getTables('catalog_product_entity');
+        $catalog_category_entity = $this->getTables('catalog_category_entity');
+        try {
+            $this->getConnection()->query("DELETE FROM `{$core_url_rewrite}` WHERE product_id IS NOT NULL AND product_id NOT IN(SELECT entity_id FROM {$catalog_product_entity});");
+        } catch (Exception $e) { }
+        try {
+            $this->getConnection()->query("DELETE FROM `{$core_url_rewrite}` WHERE category_id IS NOT NULL AND category_id NOT IN(SELECT entity_id FROM {$catalog_category_entity});");
+        } catch (Exception $e) { }
     }
 
     /**
